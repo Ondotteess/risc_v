@@ -97,27 +97,28 @@ plus:
  
   
 minus:
- li a4, 0
- li t3, 28
- li a3, 4
+ li a4, 0 		#  result
+ li t3, 28		#  to shift
   cycle_minus:
-    slli a4, a4, 4
+    slli a4, a4, 4	#  shift result
     
-    srl  a5, a1, t3     
-    srl  a6, a2, t3	
+    srl  a5, a1, t3     #  take first num of first
+    srl  a6, a2, t3	#  take first num of second
     
-    li   t1, 0
-    sub  t1, a5, a6	
+    sub  t1, a5, a6	#  calc difference
+    
     bgez t1, minus1	
-    addi t1, t1, -6	
+    addi t1, t1, -6	#  if less than zero -6
+    
     minus1:
-    add  a4, a4, t1	
-    sll  a5, a5, t3	
+    sll  a5, a5, t3	#  shift taken nums
     sll  a6, a6, t3	
-    sub  a1, a1, a5	
-    sub  a2, a2, a6	
-    addi t3, t3, -4	
-    bgez t3, cycle_minus
+    
+    add  a4, a4, t1	 #  add difference to result
+    sub  a1, a1, a5	 #  sub shifted taken num from first
+    sub  a2, a2, a6	 #  sub shifted taken num from first
+    addi t3, t3, -4	 #  sub 4 from shift register
+    bgez t3, cycle_minus 
   j exit
     
     
