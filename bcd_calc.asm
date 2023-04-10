@@ -97,8 +97,15 @@ plus:
  
   
 minus:
- li a4, 0 		#  result
- li t3, 28		#  to shift
+  li  a4, 0 		#  result
+  li  t3, 28		#  to shift
+  bgt a1, a2, cycle_minus
+  
+  mv  a3, a1
+  mv  a1, a2
+  mv  a2, a3
+  li  a3, 0
+  
   cycle_minus:
     slli a4, a4, 4	#  shift result
     
