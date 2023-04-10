@@ -101,7 +101,7 @@ minus:
   li  t3, 28		#  to shift
   bgt a1, a2, cycle_minus
   
-  mv  a3, a1
+  mv  a3, a1		#  swap if a1 < a2
   mv  a1, a2
   mv  a2, a3
   li  a3, 0
@@ -115,16 +115,16 @@ minus:
     sub  t1, a5, a6	#  calc difference
     
     bgez t1, minus1	
-    addi t1, t1, -6	#  if less than zero -6
+    addi t1, t1, -6	 #  if less than zero -6
     
     minus1:
-    sll  a5, a5, t3	#  shift taken nums
+    sll  a5, a5, t3	 #  shift taken nums
     sll  a6, a6, t3	
     
-    add  a4, a4, t1	 #  add difference to result
-    sub  a1, a1, a5	 #  sub shifted taken num from first
-    sub  a2, a2, a6	 #  sub shifted taken num from first
-    addi t3, t3, -4	 #  sub 4 from shift register
+    add  a4, a4, t1	  #  add difference to result
+    sub  a1, a1, a5	  #  sub shifted taken num from first
+    sub  a2, a2, a6	  #  sub shifted taken num from first
+    addi t3, t3, -4	  #  sub 4 from shift register
     bgez t3, cycle_minus 
   j exit
     
