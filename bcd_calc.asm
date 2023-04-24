@@ -109,7 +109,7 @@ plus:
 
   srl t5, t5, s9
   srl t6, t6, s11
-    
+  
   bne t5, t6, minus_label
   li  a4, 10
   beq t5, a4, plus_label
@@ -160,12 +160,16 @@ minus:
   print_char a4
   print_char a4
   
-  bne t5, t6, plus_label
   sll t5, t5, s9
   sll t6, t6, s11
   
   sub a1, a1, t6
   sub a2, a2, t5
+
+  srl t5, t5, s9
+  srl t6, t6, s11
+  
+  bne t5, t6, plus_label
   
   minus_label:
   li a4, 0
@@ -239,3 +243,7 @@ exit:
       blt t0, a2, cycle_exit	    #  exit
       exit 0
  
+ print_minus_plus_label:
+   li a4, 45
+   print_char a4
+   beq a4, a4, plus_label
