@@ -107,10 +107,12 @@ plus:
   sub a1, a1, t6
   sub a2, a2, t5
 
-  
-  bne s9, s11, minus_label
-  li  a4, 11
-  beq s9, a4, plus_label
+  srl t5, t5, s9
+  srl t6, t6, s11
+    
+  bne t5, t6, minus_label
+  li  a4, 10
+  beq t5, a4, plus_label
   li a4, 45
   print_char a4
   
@@ -158,7 +160,7 @@ minus:
   print_char a4
   print_char a4
   
-  beq t5, t6, plus_label
+  bne t5, t6, plus_label
   sll t5, t5, s9
   sll t6, t6, s11
   
