@@ -53,6 +53,36 @@ main:
   read_number a2
   read_char a3
   
+  li   a4, 32   		#  to shift
+  li   t4, 15			#  mask
+  li   t3, 10			#  plus
+  li   t4, 11			#  minus
+  
+  take_first_sign_plus_label:
+    addi a4, a4, -4
+    sll  t0, t4, a4		     #  take 4 bits from left to right
+    and  t6, t0, a1
+    beqz t6, take_first_sign_plus_label    #  take sign
+  
+  srl t6, t6, a4
+  mv  s11, a4
+  
+  li   a4, 32   		#  to shift
+  li   t4, 15			#  mask
+  li   t3, 10			#  plus
+  li   t4, 11			#  minus
+  
+  take_second_sign_plus_label:
+    addi a4, a4, -4
+    sll  t0, t4, a4		     #  take 4 bits from left to right
+    and  t5, t0, a2
+    beqz t5, take_second_sign_plus_label    #  take sign
+    
+  srl t5, t5, a4
+  mv  s9, a4
+  
+  
+  
   li a4, '+'  
   beq  a3, a4, plus
   li a4, '-'
@@ -63,6 +93,30 @@ main:
   beq  a3, a4, _or
   
 plus:
+
+  li a4, 32
+  
+  print_char a4
+  print_char a4
+  print_char a4
+  print_char a4
+  
+  sll t5, t5, s9
+  sll t6, t6, s11
+  
+  sub a1, a1, t6
+  sub a2, a2, t5
+
+  
+  bne s9, s11, minus_label
+  li  a4, 11
+  beq s9, a4, plus_label
+  li a4, 45
+  print_char a4
+  
+  plus_label:
+  
+  li a4, 0
   li  t4, 0			#  to add extra one
   li  a4, 0			#  return value
   li  t0, 15 			#  mask
@@ -96,7 +150,23 @@ plus:
       j plus_algo
  
   
-minus:
+minus:  
+
+  li a4, 32
+  print_char a4
+  print_char a4
+  print_char a4
+  print_char a4
+  
+  beq t5, t6, plus_label
+  sll t5, t5, s9
+  sll t6, t6, s11
+  
+  sub a1, a1, t6
+  sub a2, a2, t5
+  
+  minus_label:
+  li a4, 0
   li  a4, 0 		#  result
   li  t3, 28		#  to shift
   bgt a1, a2, cycle_minus
@@ -104,8 +174,11 @@ minus:
   mv  a3, a1		#  swap if a1 < a2
   mv  a1, a2
   mv  a2, a3
-  li  a3, 0
-  
+
+  li a4, 45
+  print_char a4
+  li a4, 0
+
   cycle_minus:
     slli a4, a4, 4	#  shift result
     
@@ -138,7 +211,6 @@ _or:
   j exit
 
 exit:
-  
 
   li s10, 70
   li s9, 13
