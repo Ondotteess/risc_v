@@ -58,29 +58,28 @@ main:
   li   t3, 10			#  plus
   li   t4, 11			#  minus
   
-  take_first_sign_plus_label:
+  take_first_sign_label:
     addi a4, a4, -4
     sll  t0, t4, a4		     #  take 4 bits from left to right
     and  t6, t0, a1
-    beqz t6, take_first_sign_plus_label    #  take sign
+    beqz t6, take_first_sign_label    #  take sign
   
-  srl t6, t6, a4
-  mv  s11, a4
+  srl t6, t6, a4		
+  mv  s11, a4			#  safe sign first num
   
   li   a4, 32   		#  to shift
   li   t4, 15			#  mask
   li   t3, 10			#  plus
   li   t4, 11			#  minus
   
-  take_second_sign_plus_label:
+  take_second_sign_label:
     addi a4, a4, -4
     sll  t0, t4, a4		     #  take 4 bits from left to right
     and  t5, t0, a2
-    beqz t5, take_second_sign_plus_label    #  take sign
+    beqz t5, take_second_sign_label    #  take sign
     
   srl t5, t5, a4
-  mv  s9, a4
-  
+  mv  s9, a4			#  safe sign second num
   
   
   li a4, '+'  
@@ -105,18 +104,18 @@ plus:
   sll t6, t6, s11
   
   sub a1, a1, t6
-  sub a2, a2, t5
+  sub a2, a2, t5		#  remove sign half-byte
 
   srl t5, t5, s9
   srl t6, t6, s11
   
-  bne t5, t6, minus_label
+  bne t5, t6, minus_label       # if sign1 !+ sign2 => minus_algo
   li  a4, 10
-  beq t5, a4, plus_label
+  beq t5, a4, plus_label	# if sign1 == sign2 && sign1 == - => add -
   li a4, 45
   print_char a4
   
-  plus_label:
+  plus_label:			#  main algo
   
   li a4, 0
   li  t4, 0			#  to add extra one
@@ -164,12 +163,12 @@ minus:
   sll t6, t6, s11
   
   sub a1, a1, t6
-  sub a2, a2, t5
+  sub a2, a2, t5		#  remove sign half=byte
 
   srl t5, t5, s9
   srl t6, t6, s11
   
-  bne t5, t6, plus_label
+  bne t5, t6, plus_label	#  if sign1 == sign2 => plus_algo
   
   minus_label:
   li a4, 0
